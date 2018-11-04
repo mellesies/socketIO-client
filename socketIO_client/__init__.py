@@ -298,9 +298,12 @@ class EngineIO(LoggingMixin):
         except KeyError:
             raise PacketError(
                 'unexpected engine.io packet type (%s)' % engineIO_packet_type)
-        delegate(engineIO_packet_data, namespace)
+                
         if engineIO_packet_type == 4:
             return engineIO_packet_data
+            
+        delegate(engineIO_packet_data, namespace)
+        
 
     def _on_open(self, data, namespace):
         namespace._find_packet_callback('open')()
