@@ -21,7 +21,7 @@ pip install -U websocket-client""")
 else:
     from websocket._ssl_compat import SSLError
 
-from .exceptions import ConnectionError, TimeoutError
+from .exceptions import ConnectionError, TimeoutError, AuthorizationError
 from .parsers import (
     encode_engineIO_content, decode_engineIO_content,
     format_packet_text, parse_packet_text)
@@ -183,7 +183,10 @@ def get_response(request, *args, **kw):
     except requests.exceptions.SSLError as e:
         raise ConnectionError('could not negotiate SSL (%s)' % e)
     status_code = response.status_code
+    
     if 200 != status_code:
+        if status_code == 401:
+            raise AuthorizationError('unauthorized')
         raise ConnectionError('unexpected status code (%s %s)' % (
             status_code, response.text))
     return response

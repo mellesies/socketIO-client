@@ -12,3 +12,7 @@ class PacketError(SocketIOError):
 
 class TimeoutError(SocketIOError):
     pass
+
+
+class AuthorizationError(SocketIOError):
+    pass
